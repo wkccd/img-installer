@@ -8,6 +8,11 @@ on:
         required: true
         default: 'https://default.example.com/file.img.gz'
 
+# 显式添加权限，确保 Release 发布正常
+permissions:
+  contents: write
+
+
 jobs:
   build-release:
     name: "Build and Release"

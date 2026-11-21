@@ -14,12 +14,13 @@
 1. 虚拟机使用：各种虚拟机直接选择iso即可
 2. 物理机使用：建议将iso放入ventoy的U盘中
 3. https://www.ventoy.net/cn/download.html
-4. 视频教学：[![YouTube](https://img.shields.io/badge/YouTube-123456?logo=youtube&labelColor=ff0000)](https://youtu.be/6FWyACrNQIg)
-[![Bilibili](https://img.shields.io/badge/Bilibili-123456?logo=bilibili&logoColor=fff&labelColor=fb7299)](https://www.bilibili.com/video/BV1DQXVYFENr)
+5. 视频教学：[![YouTube](https://img.shields.io/badge/YouTube-123456?logo=youtube&labelColor=ff0000)](https://youtu.be/6FWyACrNQIg)
+[![Bilibili](https://img.shields.io/badge/Bilibili-123456?logo=bilibili&logoColor=fff&labelColor=fb7299)](https://www.bilibili.com/video/BV1AyZcBsErt/)
 - 【第一集 ESXI虚拟机 和 物理机使用】https://youtu.be/6FWyACrNQIg   【B站】https://www.bilibili.com/video/BV1DQXVYFENr
 - 【第二集 飞牛NAS】https://youtu.be/RRBFc58SwXQ  【B站】https://www.bilibili.com/video/BV1gPXCYyEc2
 - 【第三集 Hyper-V、绿联NAS虚拟机、飞牛虚拟机使用教程】 https://www.bilibili.com/video/BV1BoZVYsE7b
 - 【第四集 PVE虚拟机里如何使用img安装器】https://www.bilibili.com/video/BV1Rx5Qz4EZB
+- 【第五集 绿联NAS安装immortalwrt25.12】https://www.bilibili.com/video/BV1AyZcBsErt/
 
 6. 具体的操作方法是:在安装器所在系统里输入 `ddd` 命令 方可调出安装菜单
    ![localhost lan - VMware ESXi 2025-03-20 10-14-45](https://github.com/user-attachments/assets/ddae80a0-9ff5-4d63-83b5-1f49da18b008)
@@ -34,6 +35,16 @@
 6. HAOS可自定义下载地址,默认构建HAOS 15.0 `haos_generic-x86-64-15.0.img.xz`
 7. 支持自定义openwrt镜像生成iso安装器,其中openwrt镜像的压缩包格式是`img.gz` `img.zip` `img.xz`三种
 
+## 和传统的NAS虚拟机导入img有什么区别
+许多人会有疑问：现如今NAS虚拟机明明支持直接导入img镜像，为什么还要使用此安装器？
+事实并非表面那样，各类NAS、虚拟机自带的img导入功能，本质只是将raw格式的img，自动转换为qcow2等虚拟磁盘格式。转换完成后，磁盘容量会严格锁定为原img的固定体积，无法自由扩容。
+
+该模式会严重限制后续固件升级：在后台网页升级界面刷写新版固件时，只要新固件体积大于原版img固件，**即便关闭保留配置选项，依旧会刷写失败、引导跑码卡死**。核心原因就是虚拟磁盘空间被固化限制，大容量的新固件，无法写入固定小容量的磁盘内。
+
+而我们的ISO安装器逻辑完全不同。
+安装过程仅占用目标磁盘的部分空间，不会锁死磁盘上限，后续新版固件可直接覆盖写入。安装时还能自主提前设定虚拟磁盘大小，只要磁盘预留空间充足，后期可以随意更换、升级固件。
+
+整体原理和安装传统 Windows、Linux 原版系统保持一致，解决了传统IMG导入固化容量的硬伤。
 
 
 ## ISO自动制作流程
